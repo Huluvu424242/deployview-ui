@@ -2,10 +2,10 @@ import { Component, Prop, State, h } from '@stencil/core';
 import { sayHello } from '../../helpers/utils';
 
 @Component({
-    tag: 'ui-verwaltung',
-    styleUrl: 'ui-verwaltung.css',
+    tag: 'deployview-verwaltung',
+    styleUrl: 'deployview-verwaltung.css',
 })
-export class UiVerwaltung {
+export class DeployviewVerwaltung {
     @State() state = false;
     @Prop() name: string;
 

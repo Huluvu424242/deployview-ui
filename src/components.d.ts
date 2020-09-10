@@ -10,6 +10,9 @@ export namespace Components {
     }
     interface DeployviewDashboard {
     }
+    interface DeployviewVerwaltung {
+        "name": string;
+    }
     interface UiVerwaltung {
         "name": string;
     }
@@ -27,6 +30,12 @@ declare global {
         prototype: HTMLDeployviewDashboardElement;
         new (): HTMLDeployviewDashboardElement;
     };
+    interface HTMLDeployviewVerwaltungElement extends Components.DeployviewVerwaltung, HTMLStencilElement {
+    }
+    var HTMLDeployviewVerwaltungElement: {
+        prototype: HTMLDeployviewVerwaltungElement;
+        new (): HTMLDeployviewVerwaltungElement;
+    };
     interface HTMLUiVerwaltungElement extends Components.UiVerwaltung, HTMLStencilElement {
     }
     var HTMLUiVerwaltungElement: {
@@ -36,6 +45,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "app-root": HTMLAppRootElement;
         "deployview-dashboard": HTMLDeployviewDashboardElement;
+        "deployview-verwaltung": HTMLDeployviewVerwaltungElement;
         "ui-verwaltung": HTMLUiVerwaltungElement;
     }
 }
@@ -44,12 +54,16 @@ declare namespace LocalJSX {
     }
     interface DeployviewDashboard {
     }
+    interface DeployviewVerwaltung {
+        "name"?: string;
+    }
     interface UiVerwaltung {
         "name"?: string;
     }
     interface IntrinsicElements {
         "app-root": AppRoot;
         "deployview-dashboard": DeployviewDashboard;
+        "deployview-verwaltung": DeployviewVerwaltung;
         "ui-verwaltung": UiVerwaltung;
     }
 }
@@ -59,6 +73,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
             "deployview-dashboard": LocalJSX.DeployviewDashboard & JSXBase.HTMLAttributes<HTMLDeployviewDashboardElement>;
+            "deployview-verwaltung": LocalJSX.DeployviewVerwaltung & JSXBase.HTMLAttributes<HTMLDeployviewVerwaltungElement>;
             "ui-verwaltung": LocalJSX.UiVerwaltung & JSXBase.HTMLAttributes<HTMLUiVerwaltungElement>;
         }
     }
