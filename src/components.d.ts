@@ -6,26 +6,26 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface AppHome {
-    }
     interface AppRoot {
+    }
+    interface DeployviewDashboard {
     }
     interface UiVerwaltung {
         "name": string;
     }
 }
 declare global {
-    interface HTMLAppHomeElement extends Components.AppHome, HTMLStencilElement {
-    }
-    var HTMLAppHomeElement: {
-        prototype: HTMLAppHomeElement;
-        new (): HTMLAppHomeElement;
-    };
     interface HTMLAppRootElement extends Components.AppRoot, HTMLStencilElement {
     }
     var HTMLAppRootElement: {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
+    };
+    interface HTMLDeployviewDashboardElement extends Components.DeployviewDashboard, HTMLStencilElement {
+    }
+    var HTMLDeployviewDashboardElement: {
+        prototype: HTMLDeployviewDashboardElement;
+        new (): HTMLDeployviewDashboardElement;
     };
     interface HTMLUiVerwaltungElement extends Components.UiVerwaltung, HTMLStencilElement {
     }
@@ -34,22 +34,22 @@ declare global {
         new (): HTMLUiVerwaltungElement;
     };
     interface HTMLElementTagNameMap {
-        "app-home": HTMLAppHomeElement;
         "app-root": HTMLAppRootElement;
+        "deployview-dashboard": HTMLDeployviewDashboardElement;
         "ui-verwaltung": HTMLUiVerwaltungElement;
     }
 }
 declare namespace LocalJSX {
-    interface AppHome {
-    }
     interface AppRoot {
+    }
+    interface DeployviewDashboard {
     }
     interface UiVerwaltung {
         "name"?: string;
     }
     interface IntrinsicElements {
-        "app-home": AppHome;
         "app-root": AppRoot;
+        "deployview-dashboard": DeployviewDashboard;
         "ui-verwaltung": UiVerwaltung;
     }
 }
@@ -57,8 +57,8 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
+            "deployview-dashboard": LocalJSX.DeployviewDashboard & JSXBase.HTMLAttributes<HTMLDeployviewDashboardElement>;
             "ui-verwaltung": LocalJSX.UiVerwaltung & JSXBase.HTMLAttributes<HTMLUiVerwaltungElement>;
         }
     }

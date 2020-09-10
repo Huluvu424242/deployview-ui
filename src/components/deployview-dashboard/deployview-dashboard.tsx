@@ -1,8 +1,8 @@
 import { Component, h } from '@stencil/core';
 
 @Component({
-  tag: 'app-home',
-  styleUrl: 'app-home.css',
+  tag: 'deployview-dashboard',
+  styleUrl: 'deployview-dashboard.css',
 })
 export class AppHome {
   render() {

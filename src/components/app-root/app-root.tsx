@@ -9,7 +9,7 @@ export class AppRoot {
     return (
       <ion-app>
         <ion-router useHash={false}>
-          <ion-route url="/" component="app-home" />
+          <ion-route url="/" component="deployview-dashboard" />
           <ion-route url="/verwaltung/:name" component="ui-verwaltung" />
         </ion-router>
         <ion-nav />
