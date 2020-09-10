@@ -1,10 +1,10 @@
 import { Component, h } from '@stencil/core';
 
 @Component({
-  tag: 'app-root',
-  styleUrl: 'app-root.css',
+  tag: 'deployview-root',
+  styleUrl: 'deployview-root.css',
 })
-export class AppRoot {
+export class DeployviewRoot {
   render() {
     return (
       <ion-app>

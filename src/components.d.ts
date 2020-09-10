@@ -10,6 +10,8 @@ export namespace Components {
     }
     interface DeployviewDashboard {
     }
+    interface DeployviewRoot {
+    }
     interface DeployviewVerwaltung {
         "name": string;
     }
@@ -30,6 +32,12 @@ declare global {
         prototype: HTMLDeployviewDashboardElement;
         new (): HTMLDeployviewDashboardElement;
     };
+    interface HTMLDeployviewRootElement extends Components.DeployviewRoot, HTMLStencilElement {
+    }
+    var HTMLDeployviewRootElement: {
+        prototype: HTMLDeployviewRootElement;
+        new (): HTMLDeployviewRootElement;
+    };
     interface HTMLDeployviewVerwaltungElement extends Components.DeployviewVerwaltung, HTMLStencilElement {
     }
     var HTMLDeployviewVerwaltungElement: {
@@ -45,6 +53,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "app-root": HTMLAppRootElement;
         "deployview-dashboard": HTMLDeployviewDashboardElement;
+        "deployview-root": HTMLDeployviewRootElement;
         "deployview-verwaltung": HTMLDeployviewVerwaltungElement;
         "ui-verwaltung": HTMLUiVerwaltungElement;
     }
@@ -53,6 +62,8 @@ declare namespace LocalJSX {
     interface AppRoot {
     }
     interface DeployviewDashboard {
+    }
+    interface DeployviewRoot {
     }
     interface DeployviewVerwaltung {
         "name"?: string;
@@ -63,6 +74,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "app-root": AppRoot;
         "deployview-dashboard": DeployviewDashboard;
+        "deployview-root": DeployviewRoot;
         "deployview-verwaltung": DeployviewVerwaltung;
         "ui-verwaltung": UiVerwaltung;
     }
@@ -73,6 +85,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
             "deployview-dashboard": LocalJSX.DeployviewDashboard & JSXBase.HTMLAttributes<HTMLDeployviewDashboardElement>;
+            "deployview-root": LocalJSX.DeployviewRoot & JSXBase.HTMLAttributes<HTMLDeployviewRootElement>;
             "deployview-verwaltung": LocalJSX.DeployviewVerwaltung & JSXBase.HTMLAttributes<HTMLDeployviewVerwaltungElement>;
             "ui-verwaltung": LocalJSX.UiVerwaltung & JSXBase.HTMLAttributes<HTMLUiVerwaltungElement>;
         }
