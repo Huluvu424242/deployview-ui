@@ -6,8 +6,6 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface AppRoot {
-    }
     interface DeployviewDashboard {
     }
     interface DeployviewRoot {
@@ -15,17 +13,8 @@ export namespace Components {
     interface DeployviewVerwaltung {
         "name": string;
     }
-    interface UiVerwaltung {
-        "name": string;
-    }
 }
 declare global {
-    interface HTMLAppRootElement extends Components.AppRoot, HTMLStencilElement {
-    }
-    var HTMLAppRootElement: {
-        prototype: HTMLAppRootElement;
-        new (): HTMLAppRootElement;
-    };
     interface HTMLDeployviewDashboardElement extends Components.DeployviewDashboard, HTMLStencilElement {
     }
     var HTMLDeployviewDashboardElement: {
@@ -44,23 +33,13 @@ declare global {
         prototype: HTMLDeployviewVerwaltungElement;
         new (): HTMLDeployviewVerwaltungElement;
     };
-    interface HTMLUiVerwaltungElement extends Components.UiVerwaltung, HTMLStencilElement {
-    }
-    var HTMLUiVerwaltungElement: {
-        prototype: HTMLUiVerwaltungElement;
-        new (): HTMLUiVerwaltungElement;
-    };
     interface HTMLElementTagNameMap {
-        "app-root": HTMLAppRootElement;
         "deployview-dashboard": HTMLDeployviewDashboardElement;
         "deployview-root": HTMLDeployviewRootElement;
         "deployview-verwaltung": HTMLDeployviewVerwaltungElement;
-        "ui-verwaltung": HTMLUiVerwaltungElement;
     }
 }
 declare namespace LocalJSX {
-    interface AppRoot {
-    }
     interface DeployviewDashboard {
     }
     interface DeployviewRoot {
@@ -68,26 +47,19 @@ declare namespace LocalJSX {
     interface DeployviewVerwaltung {
         "name"?: string;
     }
-    interface UiVerwaltung {
-        "name"?: string;
-    }
     interface IntrinsicElements {
-        "app-root": AppRoot;
         "deployview-dashboard": DeployviewDashboard;
         "deployview-root": DeployviewRoot;
         "deployview-verwaltung": DeployviewVerwaltung;
-        "ui-verwaltung": UiVerwaltung;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
             "deployview-dashboard": LocalJSX.DeployviewDashboard & JSXBase.HTMLAttributes<HTMLDeployviewDashboardElement>;
             "deployview-root": LocalJSX.DeployviewRoot & JSXBase.HTMLAttributes<HTMLDeployviewRootElement>;
             "deployview-verwaltung": LocalJSX.DeployviewVerwaltung & JSXBase.HTMLAttributes<HTMLDeployviewVerwaltungElement>;
-            "ui-verwaltung": LocalJSX.UiVerwaltung & JSXBase.HTMLAttributes<HTMLUiVerwaltungElement>;
         }
     }
 }
