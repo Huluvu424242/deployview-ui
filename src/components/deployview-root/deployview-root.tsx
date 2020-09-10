@@ -10,7 +10,7 @@ export class DeployviewRoot {
       <ion-app>
         <ion-router useHash={false}>
           <ion-route url="/" component="deployview-dashboard" />
-          <ion-route url="/verwaltung/:name" component="ui-verwaltung" />
+          <ion-route url="/verwaltung/:name" component="deployview-verwaltung" />
         </ion-router>
         <ion-nav />
       </ion-app>
