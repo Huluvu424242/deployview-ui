@@ -14,7 +14,7 @@ export class DashBoard {
     @State() umgebungen: string[];
     @State() artifacts: Artifact[];
 
-    async componentDidLoad() {
+    async componentWillLoad() {
         this.umgebungen = [...(await DashboardService.listUmgebungen())];
         this.artifacts = [...(await DashboardService.listArtifacts())];
     }
@@ -61,7 +61,6 @@ export class DashBoard {
 
                             <div class="horizontal-cards">
 
-                                // Anlegen Karte
                                 <ion-card>
                                     <ion-card-header>
                                         <ion-card-subtitle>Anlegen</ion-card-subtitle>
@@ -112,11 +111,11 @@ export class DashBoard {
                                         </ion-button>
                                     </ion-card-content>
                                 </ion-card>
-                                ))} // mapArtifacts
+                                ))}
                             </div>
                         </ion-content>
                     </ion-tab>
-                    ))} // mapUmgebungen
+                    ))}
 
                     <ion-tab-bar slot="top">
 
@@ -126,7 +125,7 @@ export class DashBoard {
                             <ion-label>{umgebung}</ion-label>
                             <ion-badge>0</ion-badge>
                         </ion-tab-button>
-                        ))} // mapUmgebungen
+                        ))}
                     </ion-tab-bar>
 
                 </ion-tabs>
