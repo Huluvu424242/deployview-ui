@@ -1,40 +1,36 @@
-import {Component, h, State} from '@stencil/core';
+import {Component, h, State, Element} from '@stencil/core';
 import {Artifact} from "../../interfaces/artifact";
+import {DashboardService} from "../../services/dashboard-service";
+import {shadow} from "@ionic/core/dist/types/utils/transition/ios.transition";
 
 @Component({
     tag: 'deployview-dashboard',
     styleUrl: 'deployview-dashboard.css',
 })
-export class AppHome {
-    @State() umgebungen: string[] = ["DEV","PROD"];
-    @State() umgebungIndex: number=0;
-    @State() artifacts: Artifact[]=[{umgebung: "DEV", department: "Finanzen", name: "Börse", deploymentStatus: "UNBEKANNT", deploymentNotice: " "}];
-    @State() artifactIndex: number= 0;
+export class DashBoard {
 
-    protected createArtifact(umgebung) {
-        umgebung = umgebung;
+    @Element() element;
 
+    @State() umgebungen: string[];
+    @State() artifacts: Artifact[];
+
+    async componentDidLoad() {
+        this.umgebungen = [...(await DashboardService.listUmgebungen())];
+        this.artifacts = [...(await DashboardService.listArtifacts())];
     }
 
-    protected currentArtifact(): Artifact {
-        return this.artifacts[this.artifactIndex];
+    async createArtifact(umgebung) {
+        console.log('CreateArtificat für Umgebung: '+umgebung);
+        // DashboardService.createArtifact(umgebung)
     }
 
-    protected currentUmgebung(): string {
-        return this.umgebungen[this.umgebungIndex];
+    async deleteArtifact(umgebung,department,artifact) {
+         await DashboardService.deleteArtifact(umgebung,department,artifact);
     }
 
-
-    protected deleteArtifact(umgebung: string, department: string, name: string) {
-        umgebung = umgebung;
-        department = department;
-        name = name;
-    }
-
-    protected saveStatus(umgebung: string, department: string, name: string) {
-        umgebung = umgebung;
-        department = department;
-        name = name;
+    async saveStatus(artifact:Artifact) {
+        const status : string = this.element.shadowRoot.querySelector('#status'+artifact.umgebung+'.'+artifact.department+'.'+artifact.name).value;
+        await DashboardService.updateArtifactStatus(artifact.umgebung,artifact.department,artifact.name,status);
     }
 
     render() {
@@ -51,16 +47,21 @@ export class AppHome {
 
             <ion-content class="ion-padding">
                 <ion-tabs>
-                    <ion-tab tab={this.currentUmgebung()}>
-                        <ion-nav></ion-nav>
+
+                    {this.umgebungen.map(umgebung => (
+
+                    <ion-tab tab={umgebung}>
+                        <ion-nav/>
                         <ion-header>
                             <ion-toolbar>
-                                <ion-title>{this.currentUmgebung()}</ion-title>
+                                <ion-title>{umgebung}</ion-title>
                             </ion-toolbar>
                         </ion-header>
                         <ion-content>
 
                             <div class="horizontal-cards">
+
+                                // Anlegen Karte
                                 <ion-card>
                                     <ion-card-header>
                                         <ion-card-subtitle>Anlegen</ion-card-subtitle>
@@ -68,36 +69,36 @@ export class AppHome {
                                     </ion-card-header>
                                     <ion-card-content>
                                         <ion-label>Umgebung:</ion-label>
-                                        <ion-input id={this.currentUmgebung() + '.newUmgebung'}/>
+                                        <ion-input id={umgebung + '.newUmgebung'}/>
 
                                         <ion-label>Abteilung:</ion-label>
-                                        <ion-input id={this.currentUmgebung() + '.newDepartment'}/>
+                                        <ion-input id={umgebung + '.newDepartment'}/>
 
                                         <ion-label>Artefakt Name:</ion-label>
-                                        <ion-input id="${umgebung1}.newArtifactName"></ion-input>
+                                        <ion-input id={umgebung + '.newArtifactName'}/>
                                     </ion-card-content>
                                     <ion-button
                                         shape="round"
                                         color="success"
-                                        onClick={() => this.createArtifact(this.currentUmgebung())}>
+                                        onClick={() => this.createArtifact(umgebung)}>
                                         Create
                                     </ion-button>
-
                                 </ion-card>
 
-
+                                {this.artifacts.filter( (artifact)=> artifact.umgebung === umgebung ).map(artifact => (
                                 <ion-card>
                                     <ion-card-header>
                                         <ion-card-subtitle>'Abteilung:
-                                            '+{this.currentArtifact().department}</ion-card-subtitle>
-                                        <ion-card-title>'Artefakt: '+{this.currentArtifact().name}</ion-card-title>
+                                            '+{artifact.department}</ion-card-subtitle>
+                                        <ion-card-title>'Artefakt: '+{artifact.name}</ion-card-title>
                                     </ion-card-header>
 
                                     <ion-card-content>
                                         <ion-label>Status:</ion-label>
-                                        <ion-select id="|${umgebung1}.${artifact.department}.${artifact.name}|"
-                                                    name="|${umgebung1}.${artifact.department}.${artifact.name}|"
-                                                    value="${artifact.deploymentStatus}"
+                                        <ion-select id={'status-'+ artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
+                                                    name={artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
+                                                    value={artifact.deploymentStatus}
+                                                    onChange={() => this.saveStatus(artifact)}
                                         >
                                             <ion-select-option value="DEPLOYMENT">Deployment</ion-select-option>
                                             <ion-select-option value="OFFLINE">Offline</ion-select-option>
@@ -106,29 +107,26 @@ export class AppHome {
                                         </ion-select>
                                         <ion-button
                                             shape="round" color="danger"
-                                            onClick={() => this.deleteArtifact(this.currentArtifact().umgebung, this.currentArtifact().department, this.currentArtifact().name)}>
+                                            onClick={() => this.deleteArtifact(artifact.umgebung, artifact.department, artifact.name)}>
                                             DELETE
                                         </ion-button>
-                                        <ion-button
-                                            shape="round" color="success"
-                                            onClick={() => this.saveStatus(this.currentArtifact().umgebung, this.currentArtifact().department, this.currentArtifact().name)}>
-                                            SAVE
-                                        </ion-button>
-
                                     </ion-card-content>
                                 </ion-card>
+                                ))} // mapArtifacts
                             </div>
                         </ion-content>
                     </ion-tab>
-
+                    ))} // mapUmgebungen
 
                     <ion-tab-bar slot="top">
 
-                        <ion-tab-button tab="${umgebung2}">
-                            <ion-icon name="calendar"></ion-icon>
-                            <ion-label>{this.currentUmgebung()}</ion-label>
+                        {this.umgebungen.map(umgebung => (
+                        <ion-tab-button tab={umgebung}>
+                            <ion-icon name="calendar"/>
+                            <ion-label>{umgebung}</ion-label>
                             <ion-badge>0</ion-badge>
                         </ion-tab-button>
+                        ))} // mapUmgebungen
                     </ion-tab-bar>
 
                 </ion-tabs>
