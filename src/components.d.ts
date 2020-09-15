@@ -6,60 +6,60 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface AppHome {
+    interface DeployviewDashboard {
     }
-    interface AppProfile {
+    interface DeployviewRoot {
+    }
+    interface DeployviewVerwaltung {
         "name": string;
-    }
-    interface AppRoot {
     }
 }
 declare global {
-    interface HTMLAppHomeElement extends Components.AppHome, HTMLStencilElement {
+    interface HTMLDeployviewDashboardElement extends Components.DeployviewDashboard, HTMLStencilElement {
     }
-    var HTMLAppHomeElement: {
-        prototype: HTMLAppHomeElement;
-        new (): HTMLAppHomeElement;
+    var HTMLDeployviewDashboardElement: {
+        prototype: HTMLDeployviewDashboardElement;
+        new (): HTMLDeployviewDashboardElement;
     };
-    interface HTMLAppProfileElement extends Components.AppProfile, HTMLStencilElement {
+    interface HTMLDeployviewRootElement extends Components.DeployviewRoot, HTMLStencilElement {
     }
-    var HTMLAppProfileElement: {
-        prototype: HTMLAppProfileElement;
-        new (): HTMLAppProfileElement;
+    var HTMLDeployviewRootElement: {
+        prototype: HTMLDeployviewRootElement;
+        new (): HTMLDeployviewRootElement;
     };
-    interface HTMLAppRootElement extends Components.AppRoot, HTMLStencilElement {
+    interface HTMLDeployviewVerwaltungElement extends Components.DeployviewVerwaltung, HTMLStencilElement {
     }
-    var HTMLAppRootElement: {
-        prototype: HTMLAppRootElement;
-        new (): HTMLAppRootElement;
+    var HTMLDeployviewVerwaltungElement: {
+        prototype: HTMLDeployviewVerwaltungElement;
+        new (): HTMLDeployviewVerwaltungElement;
     };
     interface HTMLElementTagNameMap {
-        "app-home": HTMLAppHomeElement;
-        "app-profile": HTMLAppProfileElement;
-        "app-root": HTMLAppRootElement;
+        "deployview-dashboard": HTMLDeployviewDashboardElement;
+        "deployview-root": HTMLDeployviewRootElement;
+        "deployview-verwaltung": HTMLDeployviewVerwaltungElement;
     }
 }
 declare namespace LocalJSX {
-    interface AppHome {
+    interface DeployviewDashboard {
     }
-    interface AppProfile {
+    interface DeployviewRoot {
+    }
+    interface DeployviewVerwaltung {
         "name"?: string;
     }
-    interface AppRoot {
-    }
     interface IntrinsicElements {
-        "app-home": AppHome;
-        "app-profile": AppProfile;
-        "app-root": AppRoot;
+        "deployview-dashboard": DeployviewDashboard;
+        "deployview-root": DeployviewRoot;
+        "deployview-verwaltung": DeployviewVerwaltung;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "app-home": LocalJSX.AppHome & JSXBase.HTMLAttributes<HTMLAppHomeElement>;
-            "app-profile": LocalJSX.AppProfile & JSXBase.HTMLAttributes<HTMLAppProfileElement>;
-            "app-root": LocalJSX.AppRoot & JSXBase.HTMLAttributes<HTMLAppRootElement>;
+            "deployview-dashboard": LocalJSX.DeployviewDashboard & JSXBase.HTMLAttributes<HTMLDeployviewDashboardElement>;
+            "deployview-root": LocalJSX.DeployviewRoot & JSXBase.HTMLAttributes<HTMLDeployviewRootElement>;
+            "deployview-verwaltung": LocalJSX.DeployviewVerwaltung & JSXBase.HTMLAttributes<HTMLDeployviewVerwaltungElement>;
         }
     }
 }
