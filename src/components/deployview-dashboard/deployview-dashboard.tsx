@@ -14,14 +14,23 @@ export class DashBoard {
     @State() umgebungen: string[];
     @State() artifacts: Artifact[];
 
-    async componentWillLoad() {
+    async updateModel(){
         this.umgebungen = [...(await DashboardService.listUmgebungen())];
         this.artifacts = [...(await DashboardService.listArtifacts())];
     }
 
-    async createArtifact(umgebung) {
-        console.log('CreateArtificat für Umgebung: '+umgebung);
-        // DashboardService.createArtifact(umgebung)
+    async componentWillLoad() {
+        await this.updateModel();
+    }
+
+    async createArtifact(tabname:string) {
+        console.log('CreateArtificat auf tab der Umgebung: '+tabname);
+        const umgebung: string = document.getElementById(tabname+'.newUmgebung').firstElementChild['value'];
+        const department: string = document.getElementById(tabname+'.newDepartment').firstElementChild['value'];
+        const artifact: string = document.getElementById(tabname+'.newArtifactName').firstElementChild['value'];
+        console.log('CreateArtificat:['+umgebung +','+ department+','+artifact+']');
+        DashboardService.createArtifact(umgebung,department,artifact);
+       await this.updateModel();
     }
 
     async deleteArtifact(umgebung,department,artifact) {
