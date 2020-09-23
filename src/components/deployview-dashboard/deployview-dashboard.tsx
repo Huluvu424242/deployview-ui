@@ -1,7 +1,6 @@
 import {Component, h, State, Element} from '@stencil/core';
 import {Artifact} from "../../interfaces/artifact";
 import {DashboardService} from "../../services/dashboard-service";
-import {shadow} from "@ionic/core/dist/types/utils/transition/ios.transition";
 
 @Component({
     tag: 'deployview-dashboard',
@@ -35,13 +34,14 @@ export class DashBoard {
         const department: string = document.getElementById(tabname + '.newDepartment').firstElementChild['value'];
         const artifact: string = document.getElementById(tabname + '.newArtifactName').firstElementChild['value'];
         console.log('CreateArtificat:[' + umgebung + ',' + department + ',' + artifact + ']');
-        DashboardService.createArtifact(umgebung, department, artifact);
+        await DashboardService.createArtifact(umgebung, department, artifact);
         this.leereFormular(tabname);
         await this.updateModel();
     }
 
     async deleteArtifact(umgebung,department,artifact) {
-         await DashboardService.deleteArtifact(umgebung,department,artifact);
+        await DashboardService.deleteArtifact(umgebung,department,artifact);
+        await this.updateModel();
     }
 
     async saveStatus(artifact:Artifact) {
@@ -103,9 +103,8 @@ export class DashBoard {
                                 {this.artifacts.filter( (artifact)=> artifact.umgebung === umgebung ).map(artifact => (
                                 <ion-card>
                                     <ion-card-header>
-                                        <ion-card-subtitle>'Abteilung:
-                                            '+{artifact.department}</ion-card-subtitle>
-                                        <ion-card-title>'Artefakt: '+{artifact.name}</ion-card-title>
+                                        <ion-card-subtitle>Abteilung: {artifact.department}</ion-card-subtitle>
+                                        <ion-card-title>Artefakt: {artifact.name}</ion-card-title>
                                     </ion-card-header>
 
                                     <ion-card-content>
