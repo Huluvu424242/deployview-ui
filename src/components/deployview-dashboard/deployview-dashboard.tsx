@@ -1,14 +1,16 @@
-import {Component, h, State, Element} from '@stencil/core';
+import {Component, h, State} from '@stencil/core';
 import {Artifact} from "../../interfaces/artifact";
 import {DashboardService} from "../../services/dashboard-service";
+import {SelectChangeEventDetail} from "@ionic/core";
 
 @Component({
     tag: 'deployview-dashboard',
     styleUrl: 'deployview-dashboard.css',
+    shadow: true
 })
 export class DashBoard {
 
-    @Element() element;
+    // @Element() ele;
 
     @State() umgebungen: string[];
     @State() artifacts: Artifact[];
@@ -44,9 +46,10 @@ export class DashBoard {
         await this.updateModel();
     }
 
-    async saveStatus(artifact:Artifact) {
-        const status : string = this.element.shadowRoot.querySelector('#status'+artifact.umgebung+'.'+artifact.department+'.'+artifact.name).value;
-        await DashboardService.updateArtifactStatus(artifact.umgebung,artifact.department,artifact.name,status);
+    async saveStatus(artifact:Artifact, event:CustomEvent) {
+        const status : string = event.detail.value;
+        console.log("Setze neuen Status:" +status);
+        await DashboardService.updateArtifactStatus(artifact.umgebung,artifact.department,artifact.name, status);
     }
 
     render() {
@@ -109,10 +112,10 @@ export class DashBoard {
 
                                     <ion-card-content>
                                         <ion-label>Status:</ion-label>
-                                        <ion-select id={'status-'+ artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
+                                        <ion-select id={'status'+ artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
                                                     name={artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
                                                     value={artifact.deploymentStatus}
-                                                    onChange={() => this.saveStatus(artifact)}
+                                                    onIonChange={(event: CustomEvent<SelectChangeEventDetail<any>>) => this.saveStatus(artifact, event)}
                                         >
                                             <ion-select-option value="DEPLOYMENT">Deployment</ion-select-option>
                                             <ion-select-option value="OFFLINE">Offline</ion-select-option>
