@@ -1,5 +1,4 @@
-import { Component, Prop, State, h } from '@stencil/core';
-import { sayHello } from '../../helpers/utils';
+import {Component, h, Prop, State} from '@stencil/core';
 
 @Component({
     tag: 'deployview-verwaltung',
@@ -29,7 +28,7 @@ export class DeployviewVerwaltung {
 
             <ion-content class="ion-padding">
                 <p>
-                    {sayHello()}! My name is {this.formattedName()}. My name was passed in through a route param!
+                    Test
                 </p>
 
                 <ion-item>
