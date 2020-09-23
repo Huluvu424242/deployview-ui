@@ -1,18 +1,34 @@
-import {Component, h, Prop, State} from '@stencil/core';
+import {Component, h} from '@stencil/core';
 
 @Component({
     tag: 'deployview-verwaltung',
     styleUrl: 'deployview-verwaltung.css',
 })
 export class DeployviewVerwaltung {
-    @State() state = false;
-    @Prop() name: string;
 
-    formattedName(): string {
-        if (this.name) {
-            return this.name.substr(0, 1).toUpperCase() + this.name.substr(1).toLowerCase();
-        }
-        return '';
+    // async doExport(){
+    //     window.location.href="/api/export.json";
+    // }
+
+    // https://stackoverflow.com/questions/49274786/file-upload-using-ionic-native
+
+    async doUpload(fileName) {
+        const upload = (file) => {
+            fetch('/api/import', {
+                method: 'POST',
+                body: file
+            }).then(
+                response => response.json()
+            ).then(success => {
+                console.log(success);
+                location.reload();
+            }).catch(
+                error => console.log(error)
+            );
+        };
+        upload(fileName);
+        // const input = document.getElementById('fileinput').firstElementChild;
+        // upload(input.files[0]);
     }
 
     render() {
@@ -20,20 +36,23 @@ export class DeployviewVerwaltung {
             <ion-header>
                 <ion-toolbar color="primary">
                     <ion-buttons slot="start">
-                        <ion-back-button defaultHref="/" />
+                        <ion-back-button defaultHref="/"/>
                     </ion-buttons>
-                    <ion-title>Profile: {this.name}</ion-title>
+                    <ion-title>Verwaltung</ion-title>
                 </ion-toolbar>
             </ion-header>,
 
             <ion-content class="ion-padding">
-                <p>
-                    Test
-                </p>
-
                 <ion-item>
-                    <ion-label>Setting ({this.state.toString()})</ion-label>
-                    <ion-toggle checked={this.state} onIonChange={ev => (this.state = ev.detail.checked)} />
+                    <ion-title>Status Übersicht bekannter Artefakte</ion-title>
+                    <ion-buttons slot="secondary">
+                        <ion-button size="small" shape="round" color="light" href="/api/export.json">Exportieren
+                        </ion-button>
+                        <ion-button size="small" shape="round" color="light"
+                                    onClick={() => this.doUpload('export.json')}>Importieren
+                        </ion-button>
+                        {/*<ion-input id="fileinput" type={'file'}/>*/}
+                    </ion-buttons>
                 </ion-item>
             </ion-content>,
         ];
