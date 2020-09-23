@@ -6,7 +6,6 @@ import {SelectChangeEventDetail} from "@ionic/core";
 @Component({
     tag: 'deployview-dashboard',
     styleUrl: 'deployview-dashboard.css',
-    shadow: true
 })
 export class DashBoard {
 
