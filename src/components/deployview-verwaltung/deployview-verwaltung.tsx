@@ -6,9 +6,6 @@ import {Component, h} from '@stencil/core';
 })
 export class DeployviewVerwaltung {
 
-    // async doExport(){
-    //     window.location.href="/api/export.json";
-    // }
 
     // https://stackoverflow.com/questions/49274786/file-upload-using-ionic-native
 
@@ -45,14 +42,16 @@ export class DeployviewVerwaltung {
             <ion-content class="ion-padding">
                 <ion-item>
                     <ion-title>Status Übersicht bekannter Artefakte</ion-title>
-                    <ion-buttons slot="secondary">
-                        <ion-button size="small" shape="round" color="light" href="/api/export.json">Exportieren
+                        <ion-button size="small" shape="round" color="light"
+                                    target={"_blank"}
+                                    href={"http://localhost:8080/api/export.json"}
+                        >
+                            Exportieren
                         </ion-button>
                         <ion-button size="small" shape="round" color="light"
                                     onClick={() => this.doUpload('export.json')}>Importieren
                         </ion-button>
                         {/*<ion-input id="fileinput" type={'file'}/>*/}
-                    </ion-buttons>
                 </ion-item>
             </ion-content>,
         ];

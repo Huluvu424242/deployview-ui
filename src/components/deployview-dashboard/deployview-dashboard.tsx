@@ -95,6 +95,7 @@ export class DashBoard {
                                         <ion-input id={umgebung + '.newArtifactName'}/>
                                     </ion-card-content>
                                     <ion-button
+                                        type={"submit"}
                                         shape="round"
                                         color="success"
                                         onClick={() => this.createArtifact(umgebung)}>
