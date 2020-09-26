@@ -1,7 +1,7 @@
-import {Component, h, State, Element} from '@stencil/core';
+import {Component, h, State} from '@stencil/core';
 import {Artifact} from "../../interfaces/artifact";
 import {DashboardService} from "../../services/dashboard-service";
-import {shadow} from "@ionic/core/dist/types/utils/transition/ios.transition";
+import {SelectChangeEventDetail} from "@ionic/core";
 
 @Component({
     tag: 'deployview-dashboard',
@@ -9,7 +9,7 @@ import {shadow} from "@ionic/core/dist/types/utils/transition/ios.transition";
 })
 export class DashBoard {
 
-    @Element() element;
+    // @Element() ele;
 
     @State() umgebungen: string[];
     @State() artifacts: Artifact[];
@@ -23,23 +23,32 @@ export class DashBoard {
         await this.updateModel();
     }
 
-    async createArtifact(tabname:string) {
-        console.log('CreateArtificat auf tab der Umgebung: '+tabname);
-        const umgebung: string = document.getElementById(tabname+'.newUmgebung').firstElementChild['value'];
-        const department: string = document.getElementById(tabname+'.newDepartment').firstElementChild['value'];
-        const artifact: string = document.getElementById(tabname+'.newArtifactName').firstElementChild['value'];
-        console.log('CreateArtificat:['+umgebung +','+ department+','+artifact+']');
-        DashboardService.createArtifact(umgebung,department,artifact);
-       await this.updateModel();
+    protected leereFormular( tabname : string){
+        document.getElementById(tabname+'.newUmgebung').firstElementChild['value']='';
+        document.getElementById(tabname+'.newDepartment').firstElementChild['value']='';
+        document.getElementById(tabname+'.newArtifactName').firstElementChild['value']='';
+    }
+
+    async createArtifact(tabname: string) {
+        console.log('CreateArtificat auf tab der Umgebung: ' + tabname);
+        const umgebung: string = document.getElementById(tabname + '.newUmgebung').firstElementChild['value'];
+        const department: string = document.getElementById(tabname + '.newDepartment').firstElementChild['value'];
+        const artifact: string = document.getElementById(tabname + '.newArtifactName').firstElementChild['value'];
+        console.log('CreateArtificat:[' + umgebung + ',' + department + ',' + artifact + ']');
+        await DashboardService.createArtifact(umgebung, department, artifact);
+        this.leereFormular(tabname);
+        await this.updateModel();
     }
 
     async deleteArtifact(umgebung,department,artifact) {
-         await DashboardService.deleteArtifact(umgebung,department,artifact);
+        await DashboardService.deleteArtifact(umgebung,department,artifact);
+        await this.updateModel();
     }
 
-    async saveStatus(artifact:Artifact) {
-        const status : string = this.element.shadowRoot.querySelector('#status'+artifact.umgebung+'.'+artifact.department+'.'+artifact.name).value;
-        await DashboardService.updateArtifactStatus(artifact.umgebung,artifact.department,artifact.name,status);
+    async saveStatus(artifact:Artifact, event:CustomEvent) {
+        const status : string = event.detail.value;
+        console.log("Setze neuen Status:" +status);
+        await DashboardService.updateArtifactStatus(artifact.umgebung,artifact.department,artifact.name, status);
     }
 
     render() {
@@ -86,6 +95,7 @@ export class DashBoard {
                                         <ion-input id={umgebung + '.newArtifactName'}/>
                                     </ion-card-content>
                                     <ion-button
+                                        type={"submit"}
                                         shape="round"
                                         color="success"
                                         onClick={() => this.createArtifact(umgebung)}>
@@ -96,17 +106,16 @@ export class DashBoard {
                                 {this.artifacts.filter( (artifact)=> artifact.umgebung === umgebung ).map(artifact => (
                                 <ion-card>
                                     <ion-card-header>
-                                        <ion-card-subtitle>'Abteilung:
-                                            '+{artifact.department}</ion-card-subtitle>
-                                        <ion-card-title>'Artefakt: '+{artifact.name}</ion-card-title>
+                                        <ion-card-subtitle>Abteilung: {artifact.department}</ion-card-subtitle>
+                                        <ion-card-title>Artefakt: {artifact.name}</ion-card-title>
                                     </ion-card-header>
 
                                     <ion-card-content>
                                         <ion-label>Status:</ion-label>
-                                        <ion-select id={'status-'+ artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
+                                        <ion-select id={'status'+ artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
                                                     name={artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
                                                     value={artifact.deploymentStatus}
-                                                    onChange={() => this.saveStatus(artifact)}
+                                                    onIonChange={(event: CustomEvent<SelectChangeEventDetail<any>>) => this.saveStatus(artifact, event)}
                                         >
                                             <ion-select-option value="DEPLOYMENT">Deployment</ion-select-option>
                                             <ion-select-option value="OFFLINE">Offline</ion-select-option>
@@ -132,7 +141,7 @@ export class DashBoard {
                         <ion-tab-button tab={umgebung}>
                             <ion-icon name="calendar"/>
                             <ion-label>{umgebung}</ion-label>
-                            <ion-badge>0</ion-badge>
+                            {/*<ion-badge>0</ion-badge>*/}
                         </ion-tab-button>
                         ))}
                     </ion-tab-bar>
