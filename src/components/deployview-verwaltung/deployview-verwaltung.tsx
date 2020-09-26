@@ -5,13 +5,13 @@ import {Component, h} from '@stencil/core';
     styleUrl: 'deployview-verwaltung.css',
 })
 export class DeployviewVerwaltung {
-
-
     // https://stackoverflow.com/questions/49274786/file-upload-using-ionic-native
 
-    async doUpload(fileName) {
+
+
+    async doUpload(elementId:string) {
         const upload = (file) => {
-            fetch('/api/import', {
+            return fetch('http://localhost:8080/api/import', {
                 method: 'POST',
                 body: file
             }).then(
@@ -23,9 +23,8 @@ export class DeployviewVerwaltung {
                 error => console.log(error)
             );
         };
-        upload(fileName);
-        // const input = document.getElementById('fileinput').firstElementChild;
-        // upload(input.files[0]);
+        const input : any = document.getElementById(elementId);
+        await upload(input.files[0]);
     }
 
     render() {
@@ -51,7 +50,11 @@ export class DeployviewVerwaltung {
                         <ion-button size="small" shape="round" color="light"
                                     onClick={() => this.doUpload('export.json')}>Importieren
                         </ion-button>
-                        {/*<ion-input id="fileinput" type={'file'}/>*/}
+                    <ion-button fill="outline" slot="end" style={{ marginTop: '18px' }}>
+                        {/*<ion-icon icon={videocam} slot="start"></ion-icon>*/}
+                        <input id="fileinput" hidden type="file" onChange={() => this.doUpload('fileinput')} />
+                        <label htmlFor="fileinput">Importieren</label>
+                    </ion-button>
                 </ion-item>
             </ion-content>,
         ];
