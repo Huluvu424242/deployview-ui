@@ -141,7 +141,7 @@ export class DashBoard {
                         <ion-tab-button tab={umgebung}>
                             <ion-icon name="calendar"/>
                             <ion-label>{umgebung}</ion-label>
-                            <ion-badge>0</ion-badge>
+                            {/*<ion-badge>0</ion-badge>*/}
                         </ion-tab-button>
                         ))}
                     </ion-tab-bar>
