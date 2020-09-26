@@ -1,4 +1,4 @@
-import {Component, h} from '@stencil/core';
+import {Component, h, Prop} from '@stencil/core';
 
 @Component({
     tag: 'deployview-verwaltung',
@@ -7,10 +7,15 @@ import {Component, h} from '@stencil/core';
 export class DeployviewVerwaltung {
     // HINT: https://stackoverflow.com/questions/49274786/file-upload-using-ionic-native
 
+    @Prop() apiHost: string;
+
+    async componentWillLoad(){
+        this.apiHost = "http://localhost:8080";
+    }
 
     async doUpload(elementId: string) {
         const upload = (file) => {
-            return fetch('http://localhost:8080/api/import', {
+            return fetch(this.apiHost + '/api/import', {
                 method: 'POST',
                 body: file
             }).then(
@@ -42,7 +47,7 @@ export class DeployviewVerwaltung {
                     <ion-title>Status Übersicht bekannter Artefakte</ion-title>
                     <ion-button size="small" shape="round" color="light"
                                 target={"_blank"}
-                                href={"http://localhost:8080/api/export.json"}
+                                href={this.apiHost+ "/api/export.json"}
                     >
                         Exportieren
                     </ion-button>
