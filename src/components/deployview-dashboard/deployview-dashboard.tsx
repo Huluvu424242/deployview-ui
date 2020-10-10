@@ -44,13 +44,9 @@ export class DashBoard {
         this.newArtifact = '';
     }
 
-    async createArtifact() {
-        console.log('CreateArtificat auf tab der Umgebung: ');
-        const umgebung: string = this.newUmgebung;
-        const department: string = this.newDepartment;
-        const artifact: string = this.newArtifact;
-        console.log('CreateArtificat:[' + umgebung + ',' + department + ',' + artifact + ']');
-        await DashboardService.createArtifact(umgebung, department, artifact);
+    async createArtifact(event:Event) {
+        event.preventDefault();
+        await DashboardService.createArtifact(this.newUmgebung,  this.newDepartment, this.newArtifact);
         this.leereAnlegenFormular();
         await this.updateModel();
     }
@@ -95,27 +91,31 @@ export class DashBoard {
                             <div class="horizontal-cards">
 
                                 <ion-card>
-                                    <ion-card-header>
-                                        <ion-card-subtitle>Anlegen</ion-card-subtitle>
-                                        <ion-card-title>Neues Artefakt</ion-card-title>
-                                    </ion-card-header>
-                                    <ion-card-content>
-                                        <ion-label>Umgebung:</ion-label>
-                                        <ion-input type='text' value={this.newUmgebung} onInput={this.onNewUmgebungChanged.bind(this)}/>
+                                    <form onSubmit={this.createArtifact.bind(this)}>
+                                        <ion-card-header>
+                                            <ion-card-subtitle>Anlegen</ion-card-subtitle>
+                                            <ion-card-title>Neues Artefakt</ion-card-title>
+                                        </ion-card-header>
+                                        <ion-card-content>
+                                            <ion-label>Umgebung:</ion-label>
+                                            <ion-input type='text' value={this.newUmgebung}
+                                                       onInput={this.onNewUmgebungChanged.bind(this)}/>
 
-                                        <ion-label>Abteilung:</ion-label>
-                                        <ion-input type='text' value={this.newDepartment} onInput={this.onNewDepartmentChanged.bind(this)}/>
+                                            <ion-label>Abteilung:</ion-label>
+                                            <ion-input type='text' value={this.newDepartment}
+                                                       onInput={this.onNewDepartmentChanged.bind(this)}/>
 
-                                        <ion-label>Artefakt Name:</ion-label>
-                                        <ion-input type='text' value={this.newArtifact} onInput={this.onNewArtifacthanged.bind(this)}/>
-                                    </ion-card-content>
-                                    <ion-button
-                                        type={"submit"}
-                                        shape="round"
-                                        color="success"
-                                        onClick={() => this.createArtifact()}>
-                                        Create
-                                    </ion-button>
+                                            <ion-label>Artefakt Name:</ion-label>
+                                            <ion-input type='text' value={this.newArtifact}
+                                                       onInput={this.onNewArtifacthanged.bind(this)}/>
+                                        </ion-card-content>
+                                        <ion-button
+                                            type={"submit"}
+                                            shape="round"
+                                            color="success">
+                                            Create
+                                        </ion-button>
+                                    </form>
                                 </ion-card>
 
                                 {this.artifacts.filter( (artifact)=> artifact.umgebung === umgebung ).map(artifact => (

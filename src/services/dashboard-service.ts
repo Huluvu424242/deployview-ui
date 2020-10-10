@@ -27,6 +27,7 @@ class DashboardServiceController {
     }
 
     async createArtifact(umgebung: string, department: string, artifact: string): Promise<void> {
+        console.log('CreateArtificat:[' + umgebung + ',' +  department + ',' + artifact + ']');
         return await createArtifact(umgebung,department,artifact);
     }
 
