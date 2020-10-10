@@ -99,14 +99,17 @@ export class DashBoard {
                                         <ion-card-content>
                                             <ion-label>Umgebung:</ion-label>
                                             <ion-input type='text' value={this.newUmgebung}
+                                                       required={true}
                                                        onInput={this.onNewUmgebungChanged.bind(this)}/>
 
                                             <ion-label>Abteilung:</ion-label>
                                             <ion-input type='text' value={this.newDepartment}
+                                                       required={true}
                                                        onInput={this.onNewDepartmentChanged.bind(this)}/>
 
                                             <ion-label>Artefakt Name:</ion-label>
                                             <ion-input type='text' value={this.newArtifact}
+                                                       required={true}
                                                        onInput={this.onNewArtifacthanged.bind(this)}/>
                                         </ion-card-content>
                                         <ion-button
@@ -139,6 +142,7 @@ export class DashBoard {
                                         </ion-select>
                                         <ion-button
                                             shape="round" color="danger"
+                                            type={"button"}
                                             onClick={() => this.deleteArtifact(artifact.umgebung, artifact.department, artifact.name)}>
                                             DELETE
                                         </ion-button>
