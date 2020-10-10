@@ -14,6 +14,21 @@ export class DashBoard {
     @State() umgebungen: string[];
     @State() artifacts: Artifact[];
 
+    @State() newUmgebung: string;
+    @State() newDepartment: string;
+    @State() newArtifact: string;
+
+    onNewUmgebungChanged(event:Event){
+        this.newUmgebung = (event.target as HTMLInputElement).value;
+    }
+
+    onNewDepartmentChanged(event:Event){
+        this.newDepartment = (event.target as HTMLInputElement).value;
+    }
+
+    onNewArtifacthanged(event:Event){
+        this.newArtifact = (event.target as HTMLInputElement).value;
+    }
     async updateModel(){
         this.umgebungen = [...(await DashboardService.listUmgebungen())];
         this.artifacts = [...(await DashboardService.listArtifacts())];
@@ -23,20 +38,20 @@ export class DashBoard {
         await this.updateModel();
     }
 
-    protected leereFormular( tabname : string){
-        document.getElementById(tabname+'.newUmgebung').firstElementChild['value']='';
-        document.getElementById(tabname+'.newDepartment').firstElementChild['value']='';
-        document.getElementById(tabname+'.newArtifactName').firstElementChild['value']='';
+    protected leereAnlegenFormular(): void {
+        this.newUmgebung = '';
+        this.newDepartment = '';
+        this.newArtifact = '';
     }
 
-    async createArtifact(tabname: string) {
-        console.log('CreateArtificat auf tab der Umgebung: ' + tabname);
-        const umgebung: string = document.getElementById(tabname + '.newUmgebung').firstElementChild['value'];
-        const department: string = document.getElementById(tabname + '.newDepartment').firstElementChild['value'];
-        const artifact: string = document.getElementById(tabname + '.newArtifactName').firstElementChild['value'];
+    async createArtifact() {
+        console.log('CreateArtificat auf tab der Umgebung: ');
+        const umgebung: string = this.newUmgebung;
+        const department: string = this.newDepartment;
+        const artifact: string = this.newArtifact;
         console.log('CreateArtificat:[' + umgebung + ',' + department + ',' + artifact + ']');
         await DashboardService.createArtifact(umgebung, department, artifact);
-        this.leereFormular(tabname);
+        this.leereAnlegenFormular();
         await this.updateModel();
     }
 
@@ -86,19 +101,19 @@ export class DashBoard {
                                     </ion-card-header>
                                     <ion-card-content>
                                         <ion-label>Umgebung:</ion-label>
-                                        <ion-input id={umgebung + '.newUmgebung'}/>
+                                        <ion-input type='text' value={this.newUmgebung} onInput={this.onNewUmgebungChanged.bind(this)}/>
 
                                         <ion-label>Abteilung:</ion-label>
-                                        <ion-input id={umgebung + '.newDepartment'}/>
+                                        <ion-input type='text' value={this.newDepartment} onInput={this.onNewDepartmentChanged.bind(this)}/>
 
                                         <ion-label>Artefakt Name:</ion-label>
-                                        <ion-input id={umgebung + '.newArtifactName'}/>
+                                        <ion-input type='text' value={this.newArtifact} onInput={this.onNewArtifacthanged.bind(this)}/>
                                     </ion-card-content>
                                     <ion-button
                                         type={"submit"}
                                         shape="round"
                                         color="success"
-                                        onClick={() => this.createArtifact(umgebung)}>
+                                        onClick={() => this.createArtifact()}>
                                         Create
                                     </ion-button>
                                 </ion-card>
