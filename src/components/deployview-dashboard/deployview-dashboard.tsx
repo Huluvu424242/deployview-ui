@@ -1,4 +1,4 @@
-import {Component, h, State} from '@stencil/core';
+import {Component, Element, h, Listen, State} from '@stencil/core';
 import {Artifact} from "../../interfaces/artifact";
 import {DashboardService} from "../../services/dashboard-service";
 import {SelectChangeEventDetail} from "@ionic/core";
@@ -9,7 +9,7 @@ import {SelectChangeEventDetail} from "@ionic/core";
 })
 export class DashBoard {
 
-    // @Element() ele;
+    @Element() hostElement;
 
     @State() umgebungen: string[];
     @State() artifacts: Artifact[];
@@ -18,24 +18,46 @@ export class DashBoard {
     @State() newDepartment: string;
     @State() newArtifact: string;
 
-    onNewUmgebungChanged(event:Event){
+    @State() disabledAnlegen: boolean = false;
+
+    @Listen('keydown')
+    handleEnter(event: KeyboardEvent) {
+        // console.log('EventEnter:' + event.key);
+        if (event.key == 'Enter' && !this.disabledAnlegen) {
+            this.createArtifact(event);
+        }
+    }
+
+    computeDisableAnlegenButton() {
+        this.disabledAnlegen =
+            !this.newUmgebung || this.newUmgebung.trim() === '' ||
+            !this.newDepartment || this.newDepartment.trim() === '' ||
+            !this.newArtifact || this.newArtifact.trim() === '';
+    }
+
+    onNewUmgebungChanged(event: Event) {
         this.newUmgebung = (event.target as HTMLInputElement).value;
+        this.computeDisableAnlegenButton();
     }
 
-    onNewDepartmentChanged(event:Event){
+    onNewDepartmentChanged(event: Event) {
         this.newDepartment = (event.target as HTMLInputElement).value;
+        this.computeDisableAnlegenButton();
     }
 
-    onNewArtifacthanged(event:Event){
+    onNewArtifacthanged(event: Event) {
         this.newArtifact = (event.target as HTMLInputElement).value;
+        this.computeDisableAnlegenButton();
     }
-    async updateModel(){
+
+    async updateModel() {
         this.umgebungen = [...(await DashboardService.listUmgebungen())];
         this.artifacts = [...(await DashboardService.listArtifacts())];
     }
 
     async componentWillLoad() {
         await this.updateModel();
+        this.computeDisableAnlegenButton();
     }
 
     protected leereAnlegenFormular(): void {
@@ -44,22 +66,22 @@ export class DashBoard {
         this.newArtifact = '';
     }
 
-    async createArtifact(event:Event) {
+    async createArtifact(event: Event) {
         event.preventDefault();
-        await DashboardService.createArtifact(this.newUmgebung,  this.newDepartment, this.newArtifact);
+        await DashboardService.createArtifact(this.newUmgebung, this.newDepartment, this.newArtifact);
         this.leereAnlegenFormular();
         await this.updateModel();
     }
 
-    async deleteArtifact(umgebung,department,artifact) {
-        await DashboardService.deleteArtifact(umgebung,department,artifact);
+    async deleteArtifact(umgebung, department, artifact) {
+        await DashboardService.deleteArtifact(umgebung, department, artifact);
         await this.updateModel();
     }
 
-    async saveStatus(artifact:Artifact, event:CustomEvent) {
-        const status : string = event.detail.value;
-        console.log("Setze neuen Status:" +status);
-        await DashboardService.updateArtifactStatus(artifact.umgebung,artifact.department,artifact.name, status);
+    async saveStatus(artifact: Artifact, event: CustomEvent) {
+        const status: string = event.detail.value;
+        console.log("Setze neuen Status:" + status);
+        await DashboardService.updateArtifactStatus(artifact.umgebung, artifact.department, artifact.name, status);
     }
 
     render() {
@@ -79,89 +101,91 @@ export class DashBoard {
 
                     {this.umgebungen.map(umgebung => (
 
-                    <ion-tab tab={umgebung}>
-                        <ion-nav/>
-                        <ion-header>
-                            <ion-toolbar>
-                                <ion-title>{umgebung}</ion-title>
-                            </ion-toolbar>
-                        </ion-header>
-                        <ion-content>
+                        <ion-tab tab={umgebung}>
+                            <ion-nav/>
+                            <ion-header>
+                                <ion-toolbar>
+                                    <ion-title>{umgebung}</ion-title>
+                                </ion-toolbar>
+                            </ion-header>
+                            <ion-content>
 
-                            <div class="horizontal-cards">
+                                <div class="horizontal-cards">
 
-                                <ion-card>
-                                    <form onSubmit={this.createArtifact.bind(this)}>
-                                        <ion-card-header>
-                                            <ion-card-subtitle>Anlegen</ion-card-subtitle>
-                                            <ion-card-title>Neues Artefakt</ion-card-title>
-                                        </ion-card-header>
-                                        <ion-card-content>
-                                            <ion-label>Umgebung:</ion-label>
-                                            <ion-input type='text' value={this.newUmgebung}
-                                                       required={true}
-                                                       onInput={this.onNewUmgebungChanged.bind(this)}/>
+                                    <ion-card>
+                                        <form onSubmit={this.createArtifact.bind(this)}>
+                                            <ion-card-header>
+                                                <ion-card-subtitle>Anlegen</ion-card-subtitle>
+                                                <ion-card-title>Neues Artefakt</ion-card-title>
+                                            </ion-card-header>
+                                            <ion-card-content>
+                                                <ion-label>Umgebung:</ion-label>
+                                                <ion-input type='text' value={this.newUmgebung}
+                                                           required={true}
+                                                           onInput={this.onNewUmgebungChanged.bind(this)}/>
 
-                                            <ion-label>Abteilung:</ion-label>
-                                            <ion-input type='text' value={this.newDepartment}
-                                                       required={true}
-                                                       onInput={this.onNewDepartmentChanged.bind(this)}/>
+                                                <ion-label>Abteilung:</ion-label>
+                                                <ion-input type='text' value={this.newDepartment}
+                                                           required={true}
+                                                           onInput={this.onNewDepartmentChanged.bind(this)}/>
 
-                                            <ion-label>Artefakt Name:</ion-label>
-                                            <ion-input type='text' value={this.newArtifact}
-                                                       required={true}
-                                                       onInput={this.onNewArtifacthanged.bind(this)}/>
-                                        </ion-card-content>
-                                        <ion-button
-                                            type={"submit"}
-                                            shape="round"
-                                            color="success">
-                                            Create
-                                        </ion-button>
-                                    </form>
-                                </ion-card>
+                                                <ion-label>Artefakt Name:</ion-label>
+                                                <ion-input type='text' value={this.newArtifact}
+                                                           required={true}
+                                                           onInput={this.onNewArtifacthanged.bind(this)}/>
+                                            </ion-card-content>
+                                            <ion-button
+                                                disabled={this.disabledAnlegen}
+                                                type={"submit"}
+                                                shape="round"
+                                                color="success">
+                                                Create
+                                            </ion-button>
+                                        </form>
+                                    </ion-card>
 
-                                {this.artifacts.filter( (artifact)=> artifact.umgebung === umgebung ).map(artifact => (
-                                <ion-card>
-                                    <ion-card-header>
-                                        <ion-card-subtitle>Abteilung: {artifact.department}</ion-card-subtitle>
-                                        <ion-card-title>Artefakt: {artifact.name}</ion-card-title>
-                                    </ion-card-header>
+                                    {this.artifacts.filter((artifact) => artifact.umgebung === umgebung).map(artifact => (
+                                        <ion-card>
+                                            <ion-card-header>
+                                                <ion-card-subtitle>Abteilung: {artifact.department}</ion-card-subtitle>
+                                                <ion-card-title>Artefakt: {artifact.name}</ion-card-title>
+                                            </ion-card-header>
 
-                                    <ion-card-content>
-                                        <ion-label>Status:</ion-label>
-                                        <ion-select id={'status'+ artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
-                                                    name={artifact.umgebung +'.'+ artifact.department + '.' +artifact.name}
+                                            <ion-card-content>
+                                                <ion-label>Status:</ion-label>
+                                                <ion-select
+                                                    id={'status' + artifact.umgebung + '.' + artifact.department + '.' + artifact.name}
+                                                    name={artifact.umgebung + '.' + artifact.department + '.' + artifact.name}
                                                     value={artifact.deploymentStatus}
                                                     onIonChange={(event: CustomEvent<SelectChangeEventDetail<any>>) => this.saveStatus(artifact, event)}
-                                        >
-                                            <ion-select-option value="DEPLOYMENT">Deployment</ion-select-option>
-                                            <ion-select-option value="OFFLINE">Offline</ion-select-option>
-                                            <ion-select-option value="WORKING">Working</ion-select-option>
-                                            <ion-select-option value="UNBEKANNT">Unbekannt</ion-select-option>
-                                        </ion-select>
-                                        <ion-button
-                                            shape="round" color="danger"
-                                            type={"button"}
-                                            onClick={() => this.deleteArtifact(artifact.umgebung, artifact.department, artifact.name)}>
-                                            DELETE
-                                        </ion-button>
-                                    </ion-card-content>
-                                </ion-card>
-                                ))}
-                            </div>
-                        </ion-content>
-                    </ion-tab>
+                                                >
+                                                    <ion-select-option value="DEPLOYMENT">Deployment</ion-select-option>
+                                                    <ion-select-option value="OFFLINE">Offline</ion-select-option>
+                                                    <ion-select-option value="WORKING">Working</ion-select-option>
+                                                    <ion-select-option value="UNBEKANNT">Unbekannt</ion-select-option>
+                                                </ion-select>
+                                                <ion-button
+                                                    shape="round" color="danger"
+                                                    type={"button"}
+                                                    onClick={() => this.deleteArtifact(artifact.umgebung, artifact.department, artifact.name)}>
+                                                    DELETE
+                                                </ion-button>
+                                            </ion-card-content>
+                                        </ion-card>
+                                    ))}
+                                </div>
+                            </ion-content>
+                        </ion-tab>
                     ))}
 
                     <ion-tab-bar slot="top">
 
                         {this.umgebungen.map(umgebung => (
-                        <ion-tab-button tab={umgebung}>
-                            <ion-icon name="calendar"/>
-                            <ion-label>{umgebung}</ion-label>
-                            {/*<ion-badge>0</ion-badge>*/}
-                        </ion-tab-button>
+                            <ion-tab-button tab={umgebung}>
+                                <ion-icon name="calendar"/>
+                                <ion-label>{umgebung}</ion-label>
+                                {/*<ion-badge>0</ion-badge>*/}
+                            </ion-tab-button>
                         ))}
                     </ion-tab-bar>
 
